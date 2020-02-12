@@ -13,7 +13,6 @@ def first_launch():
     prime  = [ x for x in range(N**1/2) if x.isprime() ]
 
 
-
 def load_db():
     with open(DB, 'r') as fl:
         res = json.load(fl)
