@@ -9,8 +9,12 @@ res = {} # num:{'div':[,],'abundant':Bool, 'sq':Bool, 'prime':Bool}
 
 
 def first_launch():
-    sq = [ x*x for x in range(N**1/2) ]
-    prime  = [ x for x in range(N**1/2) if x.isprime() ]
+    global res
+    sq = [ x*x for x in range(2, N**1/2) ]
+    
+    prime  = [ x for x in range(2, N) if x.isprime() ]
+    for pr in prime:
+        res[pr] = {'div':[], 'abudant':False,'prime':True,'sq':False}
 
 
 def load_db():
