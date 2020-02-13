@@ -1,5 +1,5 @@
 import time
-
+from sympy import isprime
 # Идеальным числом называется число, у которого сумма его делителей
 # равна самому числу. Например, сумма делителей числа 28 равна
 # 1 + 2 + 4 + 7 + 14 = 28, что означает, что число 28 является идеальным числом.
@@ -22,33 +22,34 @@ N = 28123
 def factors(num: int):
     """ Функция вычисляет делители числа и возвращает их списком
     input num int
-    return list
+    return set
     """
-    res = [1, ]
-    for i in range(2, int(num**0.5)+2):
+    res = {1}
+    for i in range(2, int(num**0.5)+1):
         if num % i == 0:
-            res.append(i)
-            if i != num//i:
-                res.append(num//i)
-    res = list(set(res))
+            res.add(i)
+            # if i != num//i:
+            res.add(num//i)
     return res
 
 
 def sums_abudant(res=None):
-    all_digs = set([x for x in range(1, N+1)])
-    abudant_digs = [x for x in range(12, N-11) if sum(factors(x)) > x]
-    sums = set([abudant_digs[x] + abudant_digs[y] for x in range(len(abudant_digs))
-                for y in range(x, len(abudant_digs))])
-    result = sum(list(all_digs-sums))
+    all_digs = { x for x in range(1, N+1) }  # Все числа
+    abudant_digs = [x for x in range(12, N-11) if sum(factors(x)) > x]  # Все избыточные числа
+    sums = { abudant_digs[x] + abudant_digs[y] for x in range(len(abudant_digs))
+                for y in range(x, len(abudant_digs)) } # Все возможные суммы пар избыточных чисел
+    result = sum(list(all_digs-sums)) # Остаются только те числа которые не могут быть получены суммой избыточных
     return result  # 4179871
 
 
 if __name__ == "__main__":
     start = time.time()
     result = sums_abudant()
-    if result == 4179871:
-        print(f'Решено верно! Ответ: {result}')
+    mess = f'Решено верно! Ответ: {result}' if result == 4179871 else f'Решение не верно! Ответ: {result}, а должен быть 4179871'
+    print(mess)
     elapsed = (time.time() - start)
     print(f'Затрачено времени: {elapsed}')
 
 
+# Решено верно! Ответ: 4179871
+# Затрачено времени: 4.74907660484314
