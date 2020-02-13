@@ -1,54 +1,54 @@
+import time
 
-import sys
+# Идеальным числом называется число, у которого сумма его делителей
+# равна самому числу. Например, сумма делителей числа 28 равна
+# 1 + 2 + 4 + 7 + 14 = 28, что означает, что число 28 является идеальным числом.
 
-def factors(num):
+# Число n называется недостаточным, если сумма его делителей меньше n,
+# и называется избыточным, если сумма его делителей больше n.
+
+# Так как число 12 является наименьшим избыточным числом (1 + 2 + 3 + 4 + 6 = 16),
+# наименьшее число, которое может быть записано как сумма двух избыточных чисел,
+# равно 24. Используя математический анализ, можно показать, что все целые числа
+# больше 28123 могут быть записаны как сумма двух избыточных чисел. Эта граница
+# не может быть уменьшена дальнейшим анализом, даже несмотря на то, что наибольшее
+# число, которое не может быть записано как сумма двух избыточных чисел, меньше этой границы.
+
+# Найдите сумму всех положительных чисел, которые не могут быть записаны как сумма двух
+# избыточных чисел.
+
+N = 28123
+
+def factors(num: int):
     """ Функция вычисляет делители числа и возвращает их списком
     input num int
     return list
     """
-
-    res = [1,]
+    res = [1, ]
     for i in range(2, int(num**0.5)+2):
-        if num%i == 0:
+        if num % i == 0:
             res.append(i)
             if i != num//i:
                 res.append(num//i)
-
+    res = list(set(res))
     return res
 
 
-
-
-def main():
-    res = {x:x for x in range(1,28123)}
-    abundant = []
-    count = 1
-    sums = []
-
-    for i in range(12,28112):
-        if i < sum(factors(i)):
-            abundant.append(i)
-
-    # print(abundant)
-    # print(abundant[-1])
-
-    for i in range(len(abundant)):
-        for y in range(i, len(abundant)):
-            s = abundant[i] + abundant[y]
-            if s > 28123:
-                continue
-            sums.append(s)
-            res.pop(s, 'None')
-    sys.exit(1)
-    return sum(list(res.keys())) #4178816
-
-
-
-
-
+def sums_abudant(res=None):
+    all_digs = set([x for x in range(1, N+1)])
+    abudant_digs = [x for x in range(12, N-11) if sum(factors(x)) > x]
+    sums = set([abudant_digs[x] + abudant_digs[y] for x in range(len(abudant_digs))
+                for y in range(x, len(abudant_digs))])
+    result = sum(list(all_digs-sums))
+    return result  # 4179871
 
 
 if __name__ == "__main__":
-    print(main())
+    start = time.time()
+    result = sums_abudant()
+    if result == 4179871:
+        print(f'Решено верно! Ответ: {result}')
+    elapsed = (time.time() - start)
+    print(f'Затрачено времени: {elapsed}')
 
-    # print(f"787 -> {sum(factors(787))}")
+
